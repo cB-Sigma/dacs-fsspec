@@ -1,0 +1,141 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dacs-fsspec"
+dynamic = ["version"]
+description = "fsspec filesystem for DACS: read Azure Blob data through the Distributed Accelerator for Cloud Storage cache from pandas, PyTorch, Hugging Face, Dask and anything else that speaks fsspec"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.10"
+authors = [{ name = "The dacs-fsspec Authors" }]
+keywords = ["fsspec", "dacs", "azure", "blob-storage", "cache", "kubernetes", "pytorch", "machine-learning"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Scientific/Engineering",
+  "Topic :: System :: Filesystems",
+  "Typing :: Typed",
+]
+dependencies = [
+  "fsspec>=2024.12.0",
+]
+
+[project.optional-dependencies]
+# The DACS client itself: Linux x86_64/aarch64 wheels, glibc >= 2.35.
+client = ["dacs-client"]
+# Direct Azure Blob access: metadata="adlfs" and fallback reads.
+adlfs = ["adlfs>=2023.4.0"]
+torch = ["torch"]
+all = ["dacs-client", "adlfs>=2023.4.0"]
+test = [
+  "pytest>=7",
+  "coverage[toml]>=7",
+  "pandas",
+  "pyarrow",
+]
+dev = [
+  "pytest>=7",
+  "coverage[toml]>=7",
+  "pandas",
+  "pyarrow",
+  "ruff~=0.17.0",
+  "mypy>=1.10",
+  "build",
+  "twine",
+]
+
+[project.urls]
+Homepage = "https://github.com/cb-Sigma/dacs-fsspec"
+Repository = "https://github.com/cb-Sigma/dacs-fsspec"
+Issues = "https://github.com/cb-Sigma/dacs-fsspec/issues"
+Changelog = "https://github.com/cb-Sigma/dacs-fsspec/blob/main/CHANGELOG.md"
+"DACS (upstream)" = "https://github.com/Azure/dacs"
+
+[project.scripts]
+dacs-fsspec = "dacs_fsspec.cli:main"
+
+[project.entry-points."fsspec.specs"]
+dacs = "dacs_fsspec.core:DacsFileSystem"
+
+[tool.hatch.version]
+path = "src/dacs_fsspec/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dacs_fsspec"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src",
+  "/tests",
+  "/examples",
+  "/README.md",
+  "/CHANGELOG.md",
+  "/CONTRIBUTING.md",
+  "/LICENSE",
+  "/NOTICE",
+  "/pyproject.toml",
+]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+  "integration: needs a live DACS cluster and Azure storage (skipped unless DACS_FSSPEC_TEST_URL is set)",
+  "real_client: needs the dacs-client wheel importable in this interpreter",
+]
+filterwarnings = [
+  "error::dacs_fsspec.errors.DacsFallbackWarning",
+  "error::pytest.PytestUnraisableExceptionWarning",
+  "ignore:.*multi-threaded, use of fork.*:DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["dacs_fsspec"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+exclude_also = [
+  "if TYPE_CHECKING:",
+  "raise AssertionError",
+  "\\.\\.\\.$",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "C4", "SIM", "RUF", "PT"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B018"]
+
+[tool.mypy]
+python_version = "3.10"
+files = ["src/dacs_fsspec"]
+strict = true
+# fsspec, adlfs and torch are treated as untyped so results do not depend on
+# which optional packages happen to be installed.
+disallow_subclassing_any = false
+warn_unused_ignores = true
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = ["fsspec.*", "adlfs.*", "torch.*", "safetensors.*", "py_dacs_client.*", "azure.*"]
+ignore_missing_imports = true
+follow_imports = "skip"

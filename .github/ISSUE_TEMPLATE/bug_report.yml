@@ -1,0 +1,47 @@
+name: Bug report
+description: Something in dacs-fsspec does not behave as documented
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. This adapter has not been validated on a live cluster by its maintainers yet, so reports from real deployments are especially useful.
+        Please review anything you paste for secrets and internal hostnames first.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, what you got. Include the full traceback.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: The smallest code that shows the problem. If it reproduces with `dacs_fsspec.testing.FakeDacs`, even better.
+      render: python
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where does it happen?
+      options:
+        - Live DACS cluster
+        - Real dacs-client without cache servers (Remote Blob mode)
+        - In-memory fake only
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `python -m dacs_fsspec doctor`
+      description: Secrets are hidden by the tool, but hostnames and client IDs are shown. Redact as needed.
+      render: text
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: dacs-fsspec, fsspec, dacs-client, adlfs (if used), Python, OS
+      placeholder: dacs-fsspec 0.1.0, fsspec 2026.9.0, dacs-client 0.1.0, Python 3.12, Ubuntu 24.04
+    validations:
+      required: true

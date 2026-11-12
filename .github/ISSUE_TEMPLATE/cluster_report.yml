@@ -1,0 +1,35 @@
+name: Live cluster report
+description: Tell us how dacs-fsspec behaved on a real DACS deployment (working or not)
+labels: [cluster-report]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The maintainers have not been able to run this package against a live DACS cluster. A report like this, pass or fail, directly improves the project.
+        Please review anything you paste for secrets and internal hostnames first.
+  - type: textarea
+    id: setup
+    attributes:
+      label: Setup
+      description: DACS version (chart/image), dacs-client version, Kubernetes flavour, node type, how the cache is discovered (discovery URL or static list), auth mode.
+    validations:
+      required: true
+  - type: textarea
+    id: integration
+    attributes:
+      label: Output of the integration tests
+      description: |
+        `DACS_FSSPEC_TEST_URL=dacs://... [DACS_FSSPEC_TEST_WRITE_PREFIX=dacs://...] pytest -m integration -v`
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `python -m dacs_fsspec doctor --probe <url>`
+      render: text
+  - type: textarea
+    id: surprises
+    attributes:
+      label: Anything surprising?
+      description: Behaviour that differs from the README, especially around ls/stat on directories, errors when a cache server is down, writes, fork/spawn workers, or performance.

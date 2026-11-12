@@ -1,0 +1,21 @@
+name: Feature request
+description: Suggest an improvement or a new integration
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The use case, and which library or framework is involved.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+      description: What the API or behaviour could look like.
+  - type: textarea
+    id: client-support
+    attributes:
+      label: Does the DACS client support this?
+      description: This adapter only exposes what the client can do. If the client lacks the operation (for example delete or append), the request may belong upstream at https://github.com/Azure/dacs.

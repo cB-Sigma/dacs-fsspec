@@ -1,0 +1,12 @@
+dacs-fsspec
+Copyright 2026 The dacs-fsspec Authors
+
+This product is an independent, community-maintained adapter. It is not
+affiliated with, endorsed by, or sponsored by Microsoft Corporation.
+
+It interoperates with, but does not include any code from, the Distributed
+Accelerator for Cloud Storage (DACS) project (https://github.com/Azure/dacs),
+which is Copyright (c) Microsoft Corporation and licensed under the Apache
+License, Version 2.0. "Microsoft" and "Azure" are trademarks of the Microsoft
+group of companies and are used here only to identify the software this
+adapter works with.

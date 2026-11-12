@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: DACS itself (cache servers, native client, deployment)
+    url: https://github.com/Azure/dacs/issues
+    about: Problems with DACS rather than with this fsspec adapter belong upstream.
+  - name: Security vulnerability
+    url: https://github.com/cb-Sigma/dacs-fsspec/security/advisories/new
+    about: Please report vulnerabilities privately, not in a public issue.
